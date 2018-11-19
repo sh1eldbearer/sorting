@@ -3,30 +3,30 @@
 
 #include "DblLLNode.h"
 
-template<class T> class DblLLIterator
+template<class Type> class DblLLIterator
 {
 private:
-	DblLLNode<T>* currentNode;
+	DblLLNode<Type>* currentNode;
 public:
-	DblLLIterator(DblLLNode<T>* startNode = nullptr) :
+	DblLLIterator(DblLLNode<Type>* startNode = nullptr) :
 		currentNode(startNode) { } // Default constructor
 	
 	~DblLLIterator() {} // Default destructor	
 
 	// Returns the current node
-	DblLLNode<T>* GetCurrentNode() 
+	DblLLNode<Type>* GetCurrentNode() 
 	{
 		return currentNode;
 	}
 
 	// Returns the data stored in the current node
-	T GetNodeData() 
+	Type GetNodeData() 
 	{
 		return currentNode->GetNodeData(); 
 	}
 
 	// Iterates back to the previous node (if there is one)
-	DblLLNode<T>* GetPrevNode() 
+	DblLLNode<Type>* GetPrevNode() 
 	{
 		// Returns a null value if there is no previous node (current node is the head)
 		if (currentNode == nullptr)
@@ -42,7 +42,7 @@ public:
 	}
 
 	// Iterates forward to the next node (if there is one)
-	DblLLNode<T>* GetNextNode() 
+	DblLLNode<Type>* GetNextNode() 
 	{
 		// Returns a null value if there is no next node (current node is the tail)
 		if (currentNode == nullptr)

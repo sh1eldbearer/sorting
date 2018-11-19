@@ -6,21 +6,33 @@
 #include "DblLLIterator.h"
 #include "DblLLNode.h"
 
-template <typename T> class DblLinkedList
+template <typename Type> class DblLinkedList
 {
 private:
 	int nodeCount = 0; // Stores a count of the number of nodes in the list
-	DblLLNode<T>* headNode = nullptr; // Stores a pointer to the first node in the list
-	DblLLNode<T>* tailNode = nullptr; // Stores a pointer to the last node in the list
+	DblLLNode<Type>* headNode = nullptr; // Stores a pointer to the first node in the list
+	DblLLNode<Type>* tailNode = nullptr; // Stores a pointer to the last node in the list
 public:
 	DblLinkedList() {} // Default constructor
 	~DblLinkedList() {} // Default destructor
 
-	 // Inserts a new node
-	void Insert(T newData)
+	// Gets the pointer to the head node
+	DblLLNode<Type>* GetHeadNode()
+	{
+		return headNode;
+	}
+
+	// Gets the pointer to the tail node
+	DblLLNode<Type>* GetTailNode()
+	{
+		return tailNode;
+	}
+
+	// Inserts a new node
+	void Insert(Type newData)
 	{
 		// Creates a new node
-		DblLLNode<T>* newNode = new DblLLNode<T>();
+		DblLLNode<Type>* newNode = new DblLLNode<Type>();
 
 		// Sets the data being stored in the new node
 		newNode->SetNodeData(newData);
@@ -46,11 +58,12 @@ public:
 			<< " as node " << (GetNodeCount() - 1);
 		std::cout << std::endl;
 	}
+
 	// Finds node(s) that contain a particular value 
-	template<typename T> DblLLNode<T>* Find(T dataToFind)
+	template<typename Type> DblLLNode<Type>* Find(Type dataToFind)
 	{
 		// Iterator
-		nsDLLIterator<T> myIter(headNode);
+		DblLLIterator<Type> myIter(headNode);
 
 		// Loops through the list until a matching value is found
 		for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
@@ -68,9 +81,9 @@ public:
 	}
 
 	// Finds node(s) that contain a particular value (can suppress output messages)
-	template<typename T> DblLLNode<T>* Find(T dataToFind, bool suppressMsg)
+	template<typename Type> DblLLNode<Type>* Find(Type dataToFind, bool suppressMsg)
 	{
-		nsDLLIterator<T> myIter(headNode); // Iterator
+		DblLLIterator<Type> myIter(headNode); // Iterator
 
 		// Loops through the list until a matching value is found
 		for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
@@ -94,7 +107,7 @@ public:
 	}
 	
 	// Deletes a node
-	void Delete(DblLLNode<T>* delNode)
+	void Delete(DblLLNode<Type>* delNode)
 	{
 		// Stops the function if a nullptr is passed in
 		if (delNode == nullptr)
@@ -143,7 +156,7 @@ public:
 			// Prints the list from tail to head
 			if (reverse)
 			{
-				nsDLLIterator<T> myIter(tailNode); // Iterator
+				DblLLIterator<Type> myIter(tailNode); // Iterator
 				std::cout << "Current list contents (in reverse order): ";
 
 				// Iterates through the list and outputs the contents of each node
@@ -156,7 +169,7 @@ public:
 			// Prints the list from head to tail
 			else
 			{
-				nsDLLIterator<T> myIter(headNode); // Iterator
+				DblLLIterator<Type> myIter(headNode); // Iterator
 				std::cout << "Current list contents: ";
 
 				// Iterates through the list and outputs the contents of each node
@@ -184,7 +197,7 @@ public:
 			// Prints the list from tail to head 
 			if (reverse)
 			{
-				nsDLLIterator<T> myIter(tailNode); // Iterator
+				DblLLIterator<Type> myIter(tailNode); // Iterator
 				std::cout << "Current list contents (in reverse order): ";
 
 				// Iterates through the list and outputs the contents of each node
@@ -228,7 +241,7 @@ public:
 			// Prints the list from head to tail
 			else
 			{
-				nsDLLIterator<T> myIter(headNode); // Iterator
+				DblLLIterator<Type> myIter(headNode); // Iterator
 				std::cout << "Current list contents: ";
 
 				// Iterates through the list and outputs the contents of each node
@@ -278,13 +291,13 @@ public:
 	}
 	
 	// Finds the minimum value stored in the list
-	T Minimum()
+	Type Minimum()
 	{
 		if (!IsEmpty())
 		{
-			nsDLLIterator<T> myIter(headNode); // Iterator
+			DblLLIterator<Type> myIter(headNode); // Iterator
 			// Stores the lowest value and initializes it to the value of the head node
-			T minValue = myIter.GetNodeData();
+			Type minValue = myIter.GetNodeData();
 
 			// Iterates through the list, looking for the lowest value
 			for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
@@ -307,13 +320,13 @@ public:
 	}
 
 	// Finds the maximum value stored in the list
-	T Maximum()
+	Type Maximum()
 	{
 		if (!IsEmpty())
 		{
-			nsDLLIterator<T> myIter(headNode); // Iterator
+			DblLLIterator<Type> myIter(headNode); // Iterator
 			// Stores the highest value and initializes it to the value of the head node
-			T maxValue = myIter.GetNodeData();
+			Type maxValue = myIter.GetNodeData();
 
 			// Iterates through the list, looking for the highest value
 			for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
