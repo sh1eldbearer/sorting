@@ -206,17 +206,28 @@ void InsertionSort(DblLinkedList<Type>& list)
 	for (unsortedIter; unsortedIter.GetCurrentNode() != nullptr; unsortedIter.GetNextNode())
 	{
 		Type unsortedValue = unsortedIter.GetNodeValue();
+		std::cout << "Attempting to sort value " << unsortedIter.GetNodeValue() << std::endl;
 		DblLLIterator<Type> insertionIter(unsortedIter.GetCurrentNode()->GetPrevNode());
 		for (insertionIter; insertionIter.GetNodeValue() > unsortedValue; insertionIter.GetPrevNode())
 		{
+			std::cout << "Swapping value " << insertionIter.GetNodeValue() << " to the right with value " << insertionIter.GetCurrentNode()->GetNextNode()->GetValue() << std::endl;
 			list.SwapValues(insertionIter.GetCurrentNode(), insertionIter.GetCurrentNode()->GetNextNode());
 			list.PrintList(false);
 			if (insertionIter.GetCurrentNode()->GetPrevNode() == nullptr)
 			{
+				std::cout << "We out" << std::endl;
 				break;
 			}
+			//std::cout << insertionIter.GetNodeValue() << " vs. " << unsortedIter.GetNodeValue() << ", " << insertionIter.GetCurrentNode()->GetPrevNode()->GetValue() << " vs. " << unsortedIter.GetNodeValue();
 		}
-
-
+		std::cout << std::endl;
 	}
+	/*
+	for (int i = 1; i < N; i++) { // O(N)
+		X = a[i]; // X is the item to be inserted
+			for (j = i-1; j >= 0 && a[j] > X; j--) // can be fast or slow
+				a[j+1] = a[j]; // make a place for X
+		a[j+1] = X; // index j+1 is the insertion point
+	}
+	*/
 }

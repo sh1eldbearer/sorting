@@ -8,19 +8,20 @@
 template <typename Type> class DblLLNode
 {
 private:
-	Type value = NULL; // The data being held by the this node
+	Type value = NULL; // The value being stored by the this node
 	DblLLNode<Type>* prevNode = nullptr; // A pointer to the previous node in the linked list
 	DblLLNode<Type>* nextNode = nullptr; // A pointer to the next node in the linked list
 public:
 	DblLLNode() {} // Default constructor
 	~DblLLNode() {} // Default destructor
 
-	Type GetValue() // Getter for the node's stored data
+	// Getter for the node's stored data
+	Type GetValue()
 	{
 		return value;
 	}
 
-	// Seteter for the node's stored data
+	// Setter for the node's stored value
 	void SetValue(Type newValue)
 	{
 		value = newValue;

@@ -19,7 +19,7 @@ public:
 		return currentNode;
 	}
 
-	// Returns the data stored in the current node
+	// Returns the value stored in the current node
 	Type GetNodeValue() 
 	{
 		return currentNode->GetValue(); 

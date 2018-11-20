@@ -35,7 +35,7 @@ public:
 		DblLLNode<Type>* newNode = new DblLLNode<Type>();
 
 		// Sets the data being stored in the new node
-		newNode->SetNodeValue(newValue);
+		newNode->SetValue(newValue);
 		IncreaseNodeCount();
 
 		// If this is the first node, sets the new node as the head of the list
@@ -54,7 +54,7 @@ public:
 		}
 		// Sets the new node as the new tail node
 		tailNode = newNode;
-		std::cout << "Successfully stored " << newNode->GetNodeValue() 
+		std::cout << "Successfully stored " << newNode->GetValue() 
 			<< " as node " << (GetNodeCount() - 1);
 		std::cout << std::endl;
 	}
@@ -85,7 +85,7 @@ public:
 		// Loops through the list until a matching value is found
 		for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
 		{
-			if (myIter.GetNodeData() == valueToFind)
+			if (myIter.GetNodeValue() == valueToFind)
 			{
 				if (!verbose)
 				{
@@ -137,52 +137,11 @@ public:
 			delNode->GetPrevNode()->SetNextNode(delNode->GetNextNode());
 		}
 		DecreaseNodeCount();
-		std::cout << "Value " << delNode->GetNodeValue() << " deleted from the list." << 
+		std::cout << "Value " << delNode->GetValue() << " deleted from the list." << 
 			std::endl;
 		// Deletes the node
 		delete delNode;
 
-	}
-	
-	// Prints the values stored in the list
-	void PrintList(bool reverse) // Prints the values stored in the list
-	{
-		// As long as there is at least one node in the list, prints the list
-		if (!IsEmpty())
-		{
-			// Prints the list from tail to head
-			if (reverse)
-			{
-				DblLLIterator<Type> myIter(tailNode); // Iterator
-				std::cout << "Current list contents (in reverse order): ";
-
-				// Iterates through the list and outputs the contents of each node
-				for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetPrevNode())
-				{
-					std::cout << myIter.GetNodeData() << " ";
-				}
-				std::cout << std::endl;
-			}
-			// Prints the list from head to tail
-			else
-			{
-				DblLLIterator<Type> myIter(headNode); // Iterator
-				std::cout << "Current list contents: ";
-
-				// Iterates through the list and outputs the contents of each node
-				for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
-				{
-					// Simply shows node's value
-					std::cout << myIter.GetNodeData() << " ";
-				}
-				std::cout << std::endl;
-			}
-		}
-		// The list is empty
-		else
-		{
-			// Do nothing
-		}
 	}
 
 	// Prints the values stored in the list with details about the adjacent nodes
@@ -204,11 +163,11 @@ public:
 					if (verbose)
 					{
 						// Shows node's value
-						std::cout << std::endl << myIter.GetNodeData() << " Prev: ";
+						std::cout << std::endl << myIter.GetNodeValue() << " Prev: ";
 						// Shows previous node's value and address
 						if (myIter.GetCurrentNode()->GetPrevNode() != nullptr)
 						{
-							std::cout << myIter.GetCurrentNode()->GetPrevNode()->GetNodeValue();
+							std::cout << myIter.GetCurrentNode()->GetPrevNode()->GetValue();
 						}
 						else
 						{
@@ -218,7 +177,7 @@ public:
 						// Shows next node's value and address
 						if (myIter.GetCurrentNode()->GetNextNode() != nullptr)
 						{
-							std::cout << myIter.GetCurrentNode()->GetNextNode()->GetNodeValue();
+							std::cout << myIter.GetCurrentNode()->GetNextNode()->GetValue();
 						}
 						else
 						{
@@ -230,7 +189,7 @@ public:
 					// Simply shows node's value
 					else
 					{
-						std::cout << myIter.GetNodeData() << " ";
+						std::cout << myIter.GetNodeValue() << " ";
 					}
 				}
 				std::cout << std::endl;
@@ -248,11 +207,11 @@ public:
 					if (verbose)
 					{
 						// Shows node's value
-						std::cout << std::endl << myIter.GetNodeData() << " Prev: ";
+						std::cout << std::endl << myIter.GetNodeValue() << " Prev: ";
 						// Shows previous node's value and address
 						if (myIter.GetCurrentNode()->GetPrevNode() != nullptr)
 						{
-							std::cout << myIter.GetCurrentNode()->GetPrevNode()->GetNodeValue();
+							std::cout << myIter.GetCurrentNode()->GetPrevNode()->GetValue();
 						}
 						else
 						{
@@ -262,7 +221,7 @@ public:
 						// Shows next node's value and address
 						if (myIter.GetCurrentNode()->GetNextNode() != nullptr)
 						{
-							std::cout << myIter.GetCurrentNode()->GetNextNode()->GetNodeValue();
+							std::cout << myIter.GetCurrentNode()->GetNextNode()->GetValue();
 						}
 						else
 						{
@@ -274,7 +233,7 @@ public:
 					// Simply shows node's value
 					else
 					{
-						std::cout << myIter.GetNodeData() << " ";
+						std::cout << myIter.GetNodeValue() << " ";
 					}
 				}
 				std::cout << std::endl;
@@ -294,16 +253,16 @@ public:
 		{
 			DblLLIterator<Type> myIter(headNode); // Iterator
 			// Stores the lowest value and initializes it to the value of the head node
-			Type minValue = myIter.GetNodeData();
+			Type minValue = myIter.GetNodeValue();
 
 			// Iterates through the list, looking for the lowest value
 			for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
 			{
 				// The current value is lower than the previous minimum
-				if (myIter.GetNodeData() < minValue)
+				if (myIter.GetNodeValue() < minValue)
 				{
 					// So it becomes the new low value
-					minValue = myIter.GetNodeData();
+					minValue = myIter.GetNodeValue();
 				}
 			}
 
@@ -323,16 +282,16 @@ public:
 		{
 			DblLLIterator<Type> myIter(headNode); // Iterator
 			// Stores the highest value and initializes it to the value of the head node
-			Type maxValue = myIter.GetNodeData();
+			Type maxValue = myIter.GetNodeValue();
 
 			// Iterates through the list, looking for the highest value
 			for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
 			{
 				// The current value is higher than the previous minimum
-				if (myIter.GetNodeData() > maxValue)
+				if (myIter.GetNodeValue() > maxValue)
 				{
 					// So it becomes the new high value
-					maxValue = myIter.GetNodeData();
+					maxValue = myIter.GetNodeValue();
 				}
 			}
 
