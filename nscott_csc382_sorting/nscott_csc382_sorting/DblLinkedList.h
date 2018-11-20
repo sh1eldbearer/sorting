@@ -29,13 +29,13 @@ public:
 	}
 
 	// Inserts a new node
-	void Insert(Type newData)
+	void Insert(Type newValue)
 	{
 		// Creates a new node
 		DblLLNode<Type>* newNode = new DblLLNode<Type>();
 
 		// Sets the data being stored in the new node
-		newNode->SetNodeValue(newData);
+		newNode->SetNodeValue(newValue);
 		IncreaseNodeCount();
 
 		// If this is the first node, sets the new node as the head of the list
@@ -59,40 +59,24 @@ public:
 		std::cout << std::endl;
 	}
 
-	// Finds node(s) that contain a particular value 
-	DblLLNode<Type>* Find(Type dataToFind)
+	void InsertBefore()
 	{
-		// Iterator
-		DblLLIterator<Type> myIter(headNode);
 
-		// Loops through the list until a matching value is found
-		for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
-		{
-			if (myIter.GetNodeData() == dataToFind)
-			{
-				std::cout << "Value " << dataToFind << " found at " << 
-					myIter.GetCurrentNode() << std::endl;
-				return myIter.GetCurrentNode();
-			}
-		}
-		// If no value is found, returns a nullptr
-		std::cout << "Value not found in list." << std::endl;
-		return nullptr;
 	}
 
 	// Finds node(s) that contain a particular value (can suppress output messages)
-	DblLLNode<Type>* Find(Type dataToFind, bool suppressMsg)
+	DblLLNode<Type>* Find(Type valueToFind, bool suppressMsg = false)
 	{
 		DblLLIterator<Type> myIter(headNode); // Iterator
 
 		// Loops through the list until a matching value is found
 		for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
 		{
-			if (myIter.GetNodeData() == dataToFind)
+			if (myIter.GetNodeData() == valueToFind)
 			{
 				if (!suppressMsg)
 				{
-					std::cout << "Value " << dataToFind << " found at " << 
+					std::cout << "Value " << valueToFind << " found at " << 
 						myIter.GetCurrentNode() << std::endl;
 				}
 				return myIter.GetCurrentNode();
