@@ -59,13 +59,26 @@ public:
 		std::cout << std::endl;
 	}
 
-	void InsertBefore()
+	void InsertAfter(Type newValue, DblLLNode<Type>* nodeToFollow)
+	{
+		
+	}
+
+	void InsertBefore(Type newValue, DblLLNode<Type>* nodeToPrecede)
 	{
 
 	}
 
+	// Swaps the values of two nodes without creating new nodes or temporary variables
+	void SwapValues(DblLLNode<Type>* firstNode, DblLLNode<Type>* secondNode)
+	{
+		firstNode->SetValue(firstNode->GetValue() + secondNode->GetValue());
+		secondNode->SetValue(firstNode->GetValue() - secondNode->GetValue());
+		firstNode->SetValue(firstNode->GetValue() - secondNode->GetValue());
+	}
+
 	// Finds node(s) that contain a particular value (can suppress output messages)
-	DblLLNode<Type>* Find(Type valueToFind, bool suppressMsg = false)
+	DblLLNode<Type>* Find(Type valueToFind, bool verbose = false)
 	{
 		DblLLIterator<Type> myIter(headNode); // Iterator
 
@@ -74,7 +87,7 @@ public:
 		{
 			if (myIter.GetNodeData() == valueToFind)
 			{
-				if (!suppressMsg)
+				if (!verbose)
 				{
 					std::cout << "Value " << valueToFind << " found at " << 
 						myIter.GetCurrentNode() << std::endl;
@@ -83,7 +96,7 @@ public:
 			}
 		}
 		// If no value is found, returns a nullptr
-		if (!suppressMsg)
+		if (!verbose)
 		{
 			std::cout << "Value not found in list." << std::endl;
 		}
@@ -173,7 +186,7 @@ public:
 	}
 
 	// Prints the values stored in the list with details about the adjacent nodes
-	void PrintList(bool reverse, bool detailed) // Prints the values stored in the list
+	void PrintList(bool reverse, bool verbose = false) // Prints the values stored in the list
 	{
 		// As long as there is at least one node in the list, prints the list
 		if (!IsEmpty())
@@ -188,7 +201,7 @@ public:
 				for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetPrevNode())
 				{
 					// Prints out a detailed message about the node
-					if (detailed)
+					if (verbose)
 					{
 						// Shows node's value
 						std::cout << std::endl << myIter.GetNodeData() << " Prev: ";
@@ -232,7 +245,7 @@ public:
 				for (myIter; myIter.GetCurrentNode() != nullptr; myIter.GetNextNode())
 				{
 					// Prints out a detailed message about the node
-					if (detailed)
+					if (verbose)
 					{
 						// Shows node's value
 						std::cout << std::endl << myIter.GetNodeData() << " Prev: ";

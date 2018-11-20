@@ -22,7 +22,7 @@ public:
 	// Returns the data stored in the current node
 	Type GetNodeValue() 
 	{
-		return currentNode->GetNodeValue(); 
+		return currentNode->GetValue(); 
 	}
 
 	// Iterates back to the previous node (if there is one)
