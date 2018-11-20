@@ -20,9 +20,9 @@ public:
 	}
 
 	// Returns the data stored in the current node
-	Type GetNodeData() 
+	Type GetNodeValue() 
 	{
-		return currentNode->GetNodeData(); 
+		return currentNode->GetNodeValue(); 
 	}
 
 	// Iterates back to the previous node (if there is one)

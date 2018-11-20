@@ -35,7 +35,7 @@ public:
 		DblLLNode<Type>* newNode = new DblLLNode<Type>();
 
 		// Sets the data being stored in the new node
-		newNode->SetNodeData(newData);
+		newNode->SetNodeValue(newData);
 		IncreaseNodeCount();
 
 		// If this is the first node, sets the new node as the head of the list
@@ -54,13 +54,13 @@ public:
 		}
 		// Sets the new node as the new tail node
 		tailNode = newNode;
-		std::cout << "Successfully stored " << newNode->GetNodeData() 
+		std::cout << "Successfully stored " << newNode->GetNodeValue() 
 			<< " as node " << (GetNodeCount() - 1);
 		std::cout << std::endl;
 	}
 
 	// Finds node(s) that contain a particular value 
-	template<typename Type> DblLLNode<Type>* Find(Type dataToFind)
+	DblLLNode<Type>* Find(Type dataToFind)
 	{
 		// Iterator
 		DblLLIterator<Type> myIter(headNode);
@@ -81,7 +81,7 @@ public:
 	}
 
 	// Finds node(s) that contain a particular value (can suppress output messages)
-	template<typename Type> DblLLNode<Type>* Find(Type dataToFind, bool suppressMsg)
+	DblLLNode<Type>* Find(Type dataToFind, bool suppressMsg)
 	{
 		DblLLIterator<Type> myIter(headNode); // Iterator
 
@@ -140,7 +140,7 @@ public:
 			delNode->GetPrevNode()->SetNextNode(delNode->GetNextNode());
 		}
 		DecreaseNodeCount();
-		std::cout << "Value " << delNode->GetNodeData() << " deleted from the list." << 
+		std::cout << "Value " << delNode->GetNodeValue() << " deleted from the list." << 
 			std::endl;
 		// Deletes the node
 		delete delNode;
@@ -211,7 +211,7 @@ public:
 						// Shows previous node's value and address
 						if (myIter.GetCurrentNode()->GetPrevNode() != nullptr)
 						{
-							std::cout << myIter.GetCurrentNode()->GetPrevNode()->GetNodeData();
+							std::cout << myIter.GetCurrentNode()->GetPrevNode()->GetNodeValue();
 						}
 						else
 						{
@@ -221,7 +221,7 @@ public:
 						// Shows next node's value and address
 						if (myIter.GetCurrentNode()->GetNextNode() != nullptr)
 						{
-							std::cout << myIter.GetCurrentNode()->GetNextNode()->GetNodeData();
+							std::cout << myIter.GetCurrentNode()->GetNextNode()->GetNodeValue();
 						}
 						else
 						{
@@ -255,7 +255,7 @@ public:
 						// Shows previous node's value and address
 						if (myIter.GetCurrentNode()->GetPrevNode() != nullptr)
 						{
-							std::cout << myIter.GetCurrentNode()->GetPrevNode()->GetNodeData();
+							std::cout << myIter.GetCurrentNode()->GetPrevNode()->GetNodeValue();
 						}
 						else
 						{
@@ -265,7 +265,7 @@ public:
 						// Shows next node's value and address
 						if (myIter.GetCurrentNode()->GetNextNode() != nullptr)
 						{
-							std::cout << myIter.GetCurrentNode()->GetNextNode()->GetNodeData();
+							std::cout << myIter.GetCurrentNode()->GetNextNode()->GetNodeValue();
 						}
 						else
 						{

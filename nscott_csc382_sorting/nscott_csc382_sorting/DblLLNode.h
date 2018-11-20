@@ -8,22 +8,22 @@
 template <typename Type> class DblLLNode
 {
 private:
-	Type nodeData = NULL; // The data being held by the this node
+	Type nodeValue = NULL; // The data being held by the this node
 	DblLLNode<Type>* prevNode = nullptr; // A pointer to the previous node in the linked list
 	DblLLNode<Type>* nextNode = nullptr; // A pointer to the next node in the linked list
 public:
 	DblLLNode() {} // Default constructor
 	~DblLLNode() {} // Default destructor
 
-	Type GetNodeData() // Getter for the node's stored data
+	Type GetNodeValue() // Getter for the node's stored data
 	{
-		return nodeData;
+		return nodeValue;
 	}
 
 	// Seteter for the node's stored data
-	template <typename Type> void SetNodeData(Type dataToStore)
+	void SetNodeValue(Type valueToStore)
 	{
-		nodeData = dataToStore;
+		nodeValue = valueToStore;
 	}
 
 	// Getter for the previous node in the linked list
@@ -33,7 +33,7 @@ public:
 	}
 
 	// Setter for the previous node in the linked list
-	template <typename Type> void SetPrevNode(DblLLNode<Type>* nodePtr)
+	void SetPrevNode(DblLLNode<Type>* nodePtr)
 	{
 		prevNode = nodePtr;
 	}
@@ -51,7 +51,7 @@ public:
 	}
 
 	// Setter for the previous node in the linked list
-	template <typename Type> void SetNextNode(DblLLNode<Type>* nodePtr)
+	void SetNextNode(DblLLNode<Type>* nodePtr)
 	{
 		nextNode = nodePtr;
 	}
