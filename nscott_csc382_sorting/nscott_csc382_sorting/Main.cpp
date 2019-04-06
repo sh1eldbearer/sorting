@@ -7,6 +7,7 @@ template<typename T> void GetUserInput(T* userInput);
 bool TestUserInput();
 template <typename T> bool SizeCheck(int listSize, bool verbose);
 template <typename T> void InsertionSort(LinkedList<T>& list);
+template <typename T> void QuickSort(LinkedList<T>& list);
 
 // Main program loop
 int main()
@@ -35,7 +36,8 @@ int main()
 		std::cout << "11. Auto-populate some nodes" << std::endl;
 		std::cout << "12. Print a detailed list" << std::endl << std::endl;
 
-		std::cout << "21. Test Insertion Sort" << std::endl << std::endl;
+		std::cout << "21. Test Insertion Sort" << std::endl;
+		std::cout << "22. Test Quick Sort" << std::endl << std::endl;
 
 		std::cout << "Your choice: ";
 		std::cin >> menuChoice;
@@ -130,6 +132,16 @@ int main()
 			}
 			InsertionSort(myList);
 			break;
+		case 22:
+			//std::array<int, 4> testVals = { 40, 13, 20, 8 };
+			//std::array<int, 10> testVals = { 9, 1, 4, 7, 8, 3, 6, 10, 5, 2 };
+			std::array<int, 15>  testVals = { 3,44,38,5,47,15,36,26,27,2,46,4,19,50,48 };
+			for (int i = 0; i < testVals.size(); i++)
+			{
+				myList.Insert(testVals[i]);
+			}
+			QuickSort(myList);
+			break;
 		}
 
 		std::cout << std::endl;
@@ -165,8 +177,7 @@ bool TestUserInput()
 	return !failure;
 }
 
-template <typename T>
-bool SizeCheck(T listSize, bool verbose = false)
+template <typename T> bool SizeCheck(T listSize, bool verbose = false)
 {
 	// If the list only has one element, the array is already sorted
 	if (listSize == 1)
@@ -191,8 +202,7 @@ bool SizeCheck(T listSize, bool verbose = false)
 	return false;
 }
 
-template <typename T>
-void InsertionSort(LinkedList<T>& list)
+template <typename T> void InsertionSort(LinkedList<T>& list)
 {
 	// If the element has one or less elements, it is already sorted, and no further action should be taken
 	if (SizeCheck(list.GetNodeCount(), true))
@@ -236,4 +246,15 @@ void InsertionSort(LinkedList<T>& list)
 		// Displays the list contents after sorting each element (uncomment for quick visual debug)
 		//list.PrintList(false, false);
 	}
+}
+
+template <typename T> void QuickSort(LinkedList<T>& list)
+{
+	// If the element has one or less elements, it is already sorted, and no further action should be taken
+	if (SizeCheck(list.GetNodeCount(), true))
+	{
+		return;
+	}
+
+
 }
