@@ -115,12 +115,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DblLinkedList.h" />
-    <ClInclude Include="DblLLIterator.h" />
-    <ClInclude Include="DblLLNode.h" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
+    <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="LL_Iterator.h" />
+    <ClInclude Include="LL_Node.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

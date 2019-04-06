@@ -1,20 +1,20 @@
 #include <iostream>
 #include <array>
 
-#include "DblLinkedList.h"
+#include "LinkedList.h"
 
-template<typename Type> void GetUserInput(Type* userInput);
+template<typename T> void GetUserInput(T* userInput);
 bool TestUserInput();
-template <typename Type> bool SizeCheck(int listSize, bool verbose);
-template <typename Type> void InsertionSort(DblLinkedList<Type>& list);
+template <typename T> bool SizeCheck(int listSize, bool verbose);
+template <typename T> void InsertionSort(LinkedList<T>& list);
 
 // Main program loop
 int main()
 {
 	// Linked list object
-	DblLinkedList<double> myList;
+	LinkedList<int> myList;
 	bool runProgram = true;
-	double userInput = 0;
+	auto userInput = 0;
 	int menuChoice = 0;
 
 	while (runProgram)
@@ -65,7 +65,7 @@ int main()
 				GetUserInput(&userInput);
 				if (TestUserInput())
 				{
-					myList.Delete(myList.Find(userInput, true));
+					myList.Delete(userInput);
 				}
 			}
 			break;
@@ -102,10 +102,10 @@ int main()
 			}
 			break;
 		case 6: // Displays the list of the values stored, from head to tail
-			myList.PrintList(false);
+			myList.PrintList(false, false);
 			break;
 		case 7: // Displays the list of the values stored, from tail to head
-			myList.PrintList(true);
+			myList.PrintList(true, false);
 			break;
 		case 8: // Exits the program
 			runProgram = false;
@@ -121,9 +121,10 @@ int main()
 			myList.PrintList(false, true);
 			break;
 		case 21:
-			//std::array<double, 4> testVals = { 40, 13, 20, 8 };
-			std::array<double, 15> testVals = { 3, 44, 38, 5,47,15,36,26,27,2,46,4,19,50,48 };
-			for (int i = 0; i < (int)testVals.size(); i++)
+			//std::array<int, 4> testVals = { 40, 13, 20, 8 };
+			//std::array<int, 10> testVals = { 9, 1, 4, 7, 8, 3, 6, 10, 5, 2 };
+			std::array<int, 15>  testVals = { 3,44,38,5,47,15,36,26,27,2,46,4,19,50,48 };
+			for (int i = 0; i < testVals.size(); i++)
 			{
 				myList.Insert(testVals[i]);
 			}
@@ -138,7 +139,7 @@ int main()
 }
 
 // Gets user input
-template<typename Type> void GetUserInput(Type* userInput)
+template<typename T> void GetUserInput(T* userInput)
 {
 	std::cin >> *userInput;
 }
@@ -164,8 +165,8 @@ bool TestUserInput()
 	return !failure;
 }
 
-template <typename Type>
-bool SizeCheck(Type listSize, bool verbose = false)
+template <typename T>
+bool SizeCheck(T listSize, bool verbose = false)
 {
 	// If the list only has one element, the array is already sorted
 	if (listSize == 1)
@@ -190,8 +191,8 @@ bool SizeCheck(Type listSize, bool verbose = false)
 	return false;
 }
 
-template <typename Type>
-void InsertionSort(DblLinkedList<Type>& list)
+template <typename T>
+void InsertionSort(LinkedList<T>& list)
 {
 	// If the element has one or less elements, it is already sorted, and no further action should be taken
 	if (SizeCheck(list.GetNodeCount(), true))
@@ -199,24 +200,40 @@ void InsertionSort(DblLinkedList<Type>& list)
 		return;
 	}
 	
-	// Gets the node just after the head node (element 1)
-	DblLLIterator<Type> unsortedIter(list.GetHeadNode()->GetNextNode());
+	// Starts checking nodes with the second element (first element is "sorted" by default)
+	LL_Iterator<T> nodeToSortIter(list.GetHeadNode()->GetNextNode());
+	// Iterator for looking through previously sorted elements
+	LL_Iterator<T> alreadySortedIter;
 
-	list.PrintList(false);
-	for (unsortedIter; unsortedIter.GetCurrentNode() != nullptr; unsortedIter.GetNextNode())
+	// Displays the list contents before sorting each element (commented out unless debugging is necessary)
+	//list.PrintList(false, false);
+
+	// Iterates forward through all unsorted elements
+	for (nodeToSortIter; nodeToSortIter.GetCurrentNode() != nullptr; nodeToSortIter.IterateFwd())
 	{
-		Type unsortedValue = unsortedIter.GetNodeValue();
-		DblLLIterator<Type> insertionIter(unsortedIter.GetCurrentNode()->GetPrevNode());
-		for (insertionIter; insertionIter.GetNodeValue() > unsortedValue; insertionIter.GetPrevNode())
+		// Pointer to the current element being evaluated; will update pointer when values swap
+		LL_Node<T>* nodeToInsert = nodeToSortIter.GetCurrentNode();
+		
+		// Establishes the first "already sorted" node to compare values with
+		alreadySortedIter.SetCurrentNode(nodeToSortIter.GetCurrentNode()->GetPrevNode());
+
+		// Iterates backward through all previously sorted elements
+		for (alreadySortedIter; alreadySortedIter.GetCurrentNode() != nullptr; alreadySortedIter.IterateBack())
 		{
-			list.SwapValues(insertionIter.GetCurrentNode(), insertionIter.GetCurrentNode()->GetNextNode());
-			list.PrintList(false);
-			if (insertionIter.GetCurrentNode()->GetPrevNode() == nullptr)
+			// If the current value being sorted is smaller, swap the stored values
+			if (alreadySortedIter.GetNodeData() > nodeToInsert->GetNodeData())
+			{		
+				list.SwapValues(nodeToInsert, alreadySortedIter.GetCurrentNode());
+				// Update the pointer to the new position of the value being checked
+				nodeToInsert = alreadySortedIter.GetCurrentNode();
+			}
+			else
 			{
 				break;
 			}
 		}
 
-
+		// Displays the list contents after sorting each element (uncomment for quick visual debug)
+		//list.PrintList(false, false);
 	}
 }
