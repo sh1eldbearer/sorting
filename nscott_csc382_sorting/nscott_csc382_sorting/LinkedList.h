@@ -311,7 +311,6 @@ public:
 	/// Finds and returns the largest value stored in the nodes contained in 
 	/// the linked list
 	/// </summary>
-	/// <param name="newValue"></param>
 	/// <returns>The largest value stored in the nodes contained in the linked 
 	/// list.</returns>
 	T Maximum()
@@ -347,16 +346,23 @@ public:
 	/// </summary>
 	/// <param name="node1">A node that will be switching key values with node2.</param>
 	/// <param name="node2">A node that will be switching key values with node1.</param>
-	void SwapValues(LL_Node<T>* node1, LL_Node<T>* node2)
+	/// <param name="verbose">Whether or not to output status messages to the console.</param>
+	void SwapValues(LL_Node<T>* node1, LL_Node<T>* node2, bool verbose = true)
 	{
 		if (node1 == node2)
 		{
-			std::cout << "Cannot switch values between the same node.\n\n";
+			if (verbose)
+			{
+				std::cout << "Cannot switch values between the same node.\n\n";
+			}
 			return;
 		}
 		else if (node1 == nullptr || node2 == nullptr)
 		{
-			std::cout << "Cannot switch the value of a null pointer.\n\n";
+			if (verbose)
+			{
+				std::cout << "Cannot switch the value of a null pointer.\n\n";
+			}
 			return;
 		}
 
@@ -425,13 +431,13 @@ public:
 	/// <returns>The node found at the given index. Returns nullptr if no node exists at that position.</return>
 	LL_Node<T>* FindByIndex(int index)
 	{
-		LL_Iterator<T>* myIter(headNode);
+		LL_Iterator<T> myIter(headNode);
 		int loopCount = 0;
-		for (index; loopCount < index - 1; myIter->IterateFwd())
+		for (index; loopCount < index; myIter.IterateFwd())
 		{
 			loopCount++;
 		}
-		return myIter->GetCurrentNode();
+		return myIter.GetCurrentNode();
 	}
 };
 
