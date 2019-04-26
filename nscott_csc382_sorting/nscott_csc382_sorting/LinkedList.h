@@ -134,7 +134,8 @@ public:
 	/// Finds the first instance of a key value in the linked list.
 	/// </summary>
 	/// <param name="dataToFind">The key value to look for in the linked list.</param>
-	/// <param name="verbose">Whether or not to output status messages to the console.</param>
+	/// <param name="verbose">Whether or not to output status messages to the console.
+	/// Defaults to true.</param>
 	/// <returns>A pointer to the node containing the key value. If no match is found, returns 
 	/// nullptr.</returns>
 	LL_Node<T>* Find(T dataToFind, bool verbose = true)
@@ -163,11 +164,14 @@ public:
 	}
 
 	/// <summary>
-	/// Deletes a node from the linked list.
+	/// Deletes a node with the given value from the linked list.
 	/// </summary>
-	/// <param name="newValue">The key value to look for in the linked list. If this value is 
-	/// found in a node, that node will be deleted.</param>
-	void Delete(T dataToFind)
+	/// <param name="dataToFind">The key value to look for in the linked list. If this value is 
+	/// found in a node, that node will be deleted. If the value appears multiple times in the
+	/// list, the first node that contains the value will be deleted.</param>
+	/// <param name="verbose">Whether or not to output status messages to the console.
+	/// Defaults to true.</param>
+	void Delete(T dataToFind, bool verbose = true)
 	{
 		LL_Node<T>* delNode = Find(dataToFind, true);
 
@@ -201,11 +205,88 @@ public:
 			delNode->GetNextNode()->SetPrevNode(delNode->GetPrevNode());
 			delNode->GetPrevNode()->SetNextNode(delNode->GetNextNode());
 		}
+
 		DecreaseNodeCount();
-		std::cout << "Value " << delNode->GetNodeData() << " deleted from the list." <<
-			std::endl;
+
+		if (verbose)
+		{
+			std::cout << "Value " << delNode->GetNodeData() << " deleted from the list." <<
+				std::endl;
+		}
+
 		// Deletes the node
 		delete delNode;
+	}
+
+	/// <summary>
+	/// Deletes a node from the linked list.
+	/// </summary>
+	/// <param name="delNode">The node to look for in the linked. If the node is found,
+	/// it will be deleted.</param>
+	/// <param name="verbose">Whether or not to output status messages to the console.</param>
+	void Delete(LL_Node<T>* delNode, bool verbose = true)
+	{
+		// Stops the function if a nullptr is passed in
+		if (delNode == nullptr)
+		{
+			std::cout << "Node not found in list." << std::endl;
+			return;
+		}
+		// Node is only node in the list
+		else if (delNode == headNode && delNode == tailNode)
+		{
+			headNode = nullptr;
+			tailNode = nullptr;
+		}
+		// Node is the head node
+		else if (delNode == headNode && delNode != tailNode)
+		{
+			headNode = delNode->GetNextNode();
+			headNode->ClearPrevNode();
+		}
+		// Node is the tail node
+		else if (delNode != headNode && delNode == tailNode)
+		{
+			tailNode = delNode->GetPrevNode();
+			tailNode->ClearNextNode();
+		}
+		// Node is somewhere in the middle of the list
+		else
+		{
+			delNode->GetNextNode()->SetPrevNode(delNode->GetPrevNode());
+			delNode->GetPrevNode()->SetNextNode(delNode->GetNextNode());
+		}
+
+		DecreaseNodeCount();
+
+		if (verbose)
+		{
+			std::cout << "Value " << delNode->GetNodeData() << " deleted from the list." <<
+				std::endl;
+		}
+
+		// Deletes the node
+		delete delNode;
+	}
+
+	/// <summary>
+	/// Deletes all of the nodes contained in this linked list.
+	/// </summary>
+	void Clear()
+	{
+		LL_Iterator<T> listIterator(tailNode);
+
+		// Iterates backwards through the list, and deletes any nodes in the linked list
+		for (listIterator; listIterator.GetCurrentNode() != nullptr; listIterator)
+		{
+			LL_Node<T>* prevNode = listIterator.GetCurrentNode();
+			listIterator.IterateBack();
+			Delete(prevNode, false);
+		}
+
+		// Clears the head and tail node pointers
+		headNode = nullptr;
+		tailNode = nullptr;
 	}
 
 	/// <summary>

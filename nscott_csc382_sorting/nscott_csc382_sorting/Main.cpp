@@ -1,12 +1,21 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <ctime>
 #include <array>
 #include <stack>
 #include <random>
 #include "LinkedList.h"
 
-template<typename T> void GetUserInput(T* userInput);
+template<typename T> void GetUserInput(T*);
 bool TestUserInput();
+template <typename T> int ClockInsertionSort(LinkedList<T> &, bool);
+template <typename T> void ClockMultipleInsertionSorts(LinkedList<T> &, int, std::string, std::string);
+template <typename T> int ClockQuickSort(LinkedList<T> &, bool);
+template <typename T> void ClockMultipleQuickSorts(LinkedList<T> &, int, std::string, std::string);
+template <typename T> void GetDataFromFile(LinkedList<T> &, std::string);
+template <typename T> void OutputDataToFile(LinkedList<T> &, std::string);
+template <typename T> bool SizeCheck(T, bool);
 template <typename T> void InsertionSort(LinkedList<T>& list);
 template <typename T> void QuickSort(LinkedList<T>& list);
 
@@ -19,47 +28,33 @@ int main()
 	auto userInput = 0;
 	int menuChoice = 0;
 
-	// Test arrays
-	//std::array<int, 4> testVals = { 40, 13, 20, 8 };
-	//std::array<int, 10> testVals = { 9, 1, 4, 7, 8, 3, 6, 10, 5, 2 };
-	std::array<int, 16> testVals = { 3,44,38,5,47,15,36,26,27,2,46,1,4,19,50,48 };
-	std::srand(std::time(0));
-	std::array<int, 10> testVals10;
-	std::array<int, 100> testVals100;
-	std::array<int, 1000> testVals1000;
-	for (int index = 0; index < 1000; index++)
-	{
-		if (index < 10)
-		{
-			testVals10[index] = std::rand() % 10000;
-		}
-		if (index < 100)
-		{
-			testVals100[index] = std::rand() % 10000;
-		}
-		testVals1000[index] = std::rand() % 10000;
-	}
+	// Input files
+	const std::string list10 = "num10.dat";
+	const std::string list100 = "num100.dat";
+	const std::string list1000 = "num1000.dat";
+	const std::string list10000 = "num10000.dat";
+	const std::string list100000 = "num100000.dat";
+	const std::string listOutputFile = "list_output.txt";
+	const std::string runtimeOutputFile = "times_output.txt";
+	std::string inputLine;
 
 	while (runProgram)
 	{
 		// Menu display
-		std::cout << "**********************************" << std::endl;
-		std::cout << "*** DOUBLY-LINKED LIST PROGRAM ***" << std::endl;
-		std::cout << "**********************************" << std::endl;
-		std::cout << " 1. Add new node " << std::endl;
-		std::cout << " 2. Remove node" << std::endl;
-		std::cout << " 3. Find data in list" << std::endl;
-		std::cout << " 4. Find lowest value in the list" << std::endl;
-		std::cout << " 5. Find highest value in the list" << std::endl;
-		std::cout << " 6. Display list" << std::endl;
-		std::cout << " 7. Display list in reverse order" << std::endl;
-		std::cout << " 8. Exit program" << std::endl << std::endl;
+		std::cout << "*********************************************" << std::endl;
+		std::cout << "********       SORTING PROGRAM       ********" << std::endl;
+		std::cout << "*********************************************" << std::endl << std::endl;
 
-		std::cout << "11. Auto-populate some nodes" << std::endl;
-		std::cout << "12. Print a detailed list" << std::endl << std::endl;
+		std::cout << " Please choose one of the following options:" << std::endl << std::endl;
 
-		std::cout << "21. Test Insertion Sort" << std::endl;
-		std::cout << "22. Test Quick Sort" << std::endl << std::endl;
+		std::cout << "              | Insertion Sort | Quick Sort |" << std::endl;
+		std::cout << "     10 nodes |       1        |     11     |" << std::endl;
+		std::cout << "    100 nodes |       2        |     12     |" << std::endl;
+		std::cout << "   1000 nodes |       3        |     13     |" << std::endl;
+		std::cout << "  10000 nodes |       4        |     14     |" << std::endl;
+		std::cout << " 100000 nodes |       5        |     15     |" << std::endl << std::endl;
+
+		std::cout << " Exit program |       99" << std::endl << std::endl;
 
 		std::cout << "Your choice: ";
 		std::cin >> menuChoice;
@@ -69,94 +64,98 @@ int main()
 
 		switch (menuChoice)
 		{
-		case 1: // Inputs a new node containing a inputted key value into the list
-			std::cout << "What data would you like to store in this node? ";
-			GetUserInput(&userInput);
-			if (TestUserInput())
-			{
-				myList.Insert(userInput);
-			}
-			break;
-		case 2: // Deletes the first node found containing the inputted value
-			// If the list has no nodes, displays an error message
-			if (myList.IsEmpty())
-			{
-				std::cout << "There are no nodes in the list." << std::endl;
-			}
-			else
-			{
-				std::cout << "What value would you like to delete from the list? ";
-				GetUserInput(&userInput);
-				if (TestUserInput())
-				{
-					myList.Delete(userInput);
-				}
-			}
-			break;
-		case 3: // Finds a value in the list
-			// If the list has no nodes, displays an error message
-			if (myList.IsEmpty())
-			{
-				std::cout << "There are no nodes in the list." << std::endl;
-			}
-			else
-			{
-				std::cout << "What value would you like to find in the list? ";
-				GetUserInput(&userInput);
-				if (TestUserInput())
-				{
-					myList.Find(userInput);
-				}
-			}
-			break;
-		case 4: // Returns the lowest value stored in the list
-			userInput = myList.Minimum();
-			if (userInput != NULL)
-			{
-				std::cout << "The lowest value stored in the list is: " <<
-					myList.Minimum() << std::endl;
-			}
-			break;
-		case 5: // Returns the highest value stored in the list
-			userInput = myList.Maximum();
-			if (userInput != NULL)
-			{
-				std::cout << "The highest value stored in the list is: " <<
-					myList.Maximum() << std::endl;
-			}
-			break;
-		case 6: // Displays the list of the values stored, from head to tail
+		// Insertion sorts
+		case 1: // Insertion sort on 10 values
+			GetDataFromFile(myList, list10);
+			ClockInsertionSort(myList, true);
 			myList.PrintList(false, false);
+			OutputDataToFile(myList, listOutputFile);
 			break;
-		case 7: // Displays the list of the values stored, from tail to head
-			myList.PrintList(true, false);
+		case 2: // Insertion sort on 100 values
+			GetDataFromFile(myList, list100);
+			ClockInsertionSort(myList, true);
+			myList.PrintList(false, false);
+			OutputDataToFile(myList, listOutputFile);
 			break;
-		case 8: // Exits the program
+		case 3: // Insertion sort on 1000 values
+			GetDataFromFile(myList, list1000);
+			ClockInsertionSort(myList, true);
+			OutputDataToFile(myList, listOutputFile);
+			break;
+		case 4: // Insertion sort on 10000 values
+			GetDataFromFile(myList, list10000);
+			ClockInsertionSort(myList, true);
+			OutputDataToFile(myList, listOutputFile);
+			break;
+		case 5: // Insertion sort on 100000 values
+			GetDataFromFile(myList, list100000);
+			ClockInsertionSort(myList, true);
+			OutputDataToFile(myList, listOutputFile);
+			break;
+		// Quick Sorts
+		case 11: // Quick sort on 10 values
+			GetDataFromFile(myList, list10);
+			ClockQuickSort(myList, true);
+			myList.PrintList(false, false);
+			OutputDataToFile(myList, listOutputFile);
+			break;
+		case 12: // Quick sort on 100 values
+			GetDataFromFile(myList, list100);
+			ClockQuickSort(myList, true);
+			myList.PrintList(false, false);
+			OutputDataToFile(myList, listOutputFile);
+			break;
+		case 13: // Quick sort on 1000 values
+			GetDataFromFile(myList, list1000);
+			ClockQuickSort(myList, true);
+			OutputDataToFile(myList, listOutputFile);
+			break;
+		case 14: // Quick sort on 10000 values
+			GetDataFromFile(myList, list10000);
+			ClockQuickSort(myList, true);
+			OutputDataToFile(myList, listOutputFile);
+			break;
+		case 15: // Quick sort on 100000 values
+			GetDataFromFile(myList, list100000);
+			ClockQuickSort(myList, true);
+			OutputDataToFile(myList, listOutputFile);
+			break;
+		// Hidden dev functions that run each sort multiple times and output their completion times to an output file
+		case 31: // Insertion sort on 10 values
+			ClockMultipleInsertionSorts(myList, 10, list10, runtimeOutputFile);
+			break;
+		case 32: // Insertion sort on 100 values
+			ClockMultipleInsertionSorts(myList, 10, list100, runtimeOutputFile);
+			break;
+		case 33: // Insertion sort on 1000 values
+			ClockMultipleInsertionSorts(myList, 10, list1000, runtimeOutputFile);
+			break;
+		case 34: // Insertion sort on 10000 values
+			ClockMultipleInsertionSorts(myList, 10, list10000, runtimeOutputFile);
+			break;
+		case 35: // Insertion sort on 100000 values
+			ClockMultipleInsertionSorts(myList, 10, list100000, runtimeOutputFile);
+			break;
+		case 41: // Quick sort on 10 values
+			ClockMultipleQuickSorts(myList, 10, list10, runtimeOutputFile);
+			break;
+		case 42: // Quick sort on 100 values
+			ClockMultipleQuickSorts(myList, 10, list100, runtimeOutputFile);
+			break;
+		case 43: // Quick sort on 1000 values
+			ClockMultipleQuickSorts(myList, 10, list1000, runtimeOutputFile);
+			break;
+		case 44: // Quick sort on 10000 values
+			ClockMultipleQuickSorts(myList, 10, list10000, runtimeOutputFile);
+			break;
+		case 45: // Quick sort on 100000 values
+			ClockMultipleQuickSorts(myList, 10, list100000, runtimeOutputFile);
+			break;
+		case 99: // Exits the program
 			runProgram = false;
 			break;
-		case 11: // Adds a random amount of random values to the list
-			for (int i = 0; i < (std::rand() % 15 + 10); i++)
-			{
-				userInput = std::rand() % 101;
-				myList.Insert(userInput, false);
-			}
-			break;
-		case 12: // Prints a list of each value, and the adjacent values and node addresses
-			myList.PrintList(false, true);
-			break;
-		case 21:
-			for (int i = 0; i < (int)testVals.size(); i++)
-			{
-				myList.Insert(testVals[i], false);
-			}
-			InsertionSort(myList);
-			break;
-		case 22:
-			for (int i = 0; i < (int)testVals.size(); i++)
-			{
-				myList.Insert(testVals[i], false);
-			}
-			QuickSort(myList);
+		default: // Invalid option
+			std::cout << "No such option exists. Please try again." << std::endl;
 			break;
 		}
 
@@ -193,6 +192,140 @@ bool TestUserInput()
 	return !failure;
 }
 
+template <typename T>
+int ClockInsertionSort(LinkedList<T> &myList, bool verbose)
+{
+	clock_t runTimer;
+
+	// Starts tracking time
+	runTimer = clock();
+	// Runs the insertion sort
+	InsertionSort(myList);
+	// Finishes tracking time
+	runTimer = clock() - runTimer;
+
+	// Outputs the run time to the console, if desired
+	if (verbose)
+	{
+		std::cout << "Insertion sort took " << runTimer << " clicks to complete." << std::endl << std::endl;
+	}
+
+	return runTimer;
+}
+
+template <typename T>
+void ClockMultipleInsertionSorts(LinkedList<T> &myList, int timesToRun, std::string inputFileName, std::string outputFileName)
+{
+	// Opens the target file and clears its contents (will create the file if it does not already exist)
+	std::ofstream outputFile;
+	outputFile.open(outputFileName, std::ios::out);
+	outputFile.clear();
+
+	// Runs a user-defined numer of insertion sorts, and records their run times to an external file
+	for (int count = 0; count < timesToRun; count++)
+	{
+		GetDataFromFile(myList, inputFileName);
+		outputFile << ClockInsertionSort(myList, false) << "\n";
+	}
+
+	outputFile.close();
+
+	std::cout << "The runtimes of each of the " << timesToRun <<
+		" insertion sorts has been outputted to " << outputFileName << std::endl;
+}
+
+template <typename T>
+int ClockQuickSort(LinkedList<T> &myList, bool verbose)
+{
+	clock_t runTimer;
+
+	// Starts tracking time
+	runTimer = clock();
+	// Runs the insertion sort
+	QuickSort(myList);
+	// Finishes tracking time
+	runTimer = clock() - runTimer;
+
+	// Outputs the run time to the console, if desired
+	if (verbose)
+	{
+		std::cout << "Quick sort took " << runTimer << " clicks to complete." << std::endl << std::endl;
+	}
+
+	return runTimer;
+}
+
+template <typename T>
+void ClockMultipleQuickSorts(LinkedList<T> &myList, int timesToRun, std::string inputFileName, std::string outputFileName)
+{
+	// Opens the target file and clears its contents (will create the file if it does not already exist)
+	std::ofstream outputFile;
+	outputFile.open(outputFileName, std::ios::out);
+	outputFile.clear();
+
+	// Runs a user-defined numer of quick sorts, and records their run times to an external file
+	for (int count = 0; count < timesToRun; count++)
+	{
+		GetDataFromFile(myList, inputFileName);
+		outputFile << ClockQuickSort(myList, false) << "\n";
+	}
+
+	outputFile.close();
+
+	std::cout << "The runtimes of each of the " << timesToRun <<
+		" quick sorts has been outputted to " << outputFileName << std::endl;
+}
+// Retrieves data from an external file
+template <typename T> 
+void GetDataFromFile(LinkedList<T> &myList, std::string fileToOpen)
+{
+	// Opens the target file
+	std::ifstream inputFile;
+	inputFile.open(fileToOpen, std::ios::in);
+
+	std::string inputLine;
+
+	// Clears the list of any previous stored values
+	myList.Clear();
+
+	// Gets the data from the target file
+	if (inputFile)
+	{
+		while (getline(inputFile, inputLine))
+		{
+			myList.Insert(std::stoi(inputLine), false);
+		}
+	}
+	// If the target file doesn't exist, displays an error message
+	else
+	{
+		std::cout << "There was an error reading from the input file." << std::endl;
+	}
+
+	inputFile.close();
+}
+
+// Outputs the stored data of a linked list to a target file
+template<typename T>
+void OutputDataToFile(LinkedList<T> &myList, std::string fileToOpen)
+{
+	// Opens the target file and clears its contents (will create the file if it does not already exist)
+	std::ofstream outputFile;
+	outputFile.open(fileToOpen, std::ios::out);
+	outputFile.clear();
+
+	LL_Iterator<T> listIterator(myList.GetHeadNode());
+
+	// Iterates through the linked list, and prints each node's data to the target file
+	for (listIterator; listIterator.GetCurrentNode() != nullptr; listIterator.IterateFwd())
+	{
+		outputFile << listIterator.GetNodeData() << " ";
+	}
+
+	outputFile.close();
+}
+
+// Checks to see if the list has enough nodes to be sorted
 template <typename T> bool SizeCheck(T listSize, bool verbose = false)
 {
 	// If the list only has one element, the array is already sorted
@@ -273,6 +406,7 @@ template <typename T> void QuickSort(LinkedList<T>& list)
 	int leftIndex = pivotIndex + 1; // The index of the lowest indexed element needing to be checked (swap node)
 	int rightIndex = list.GetNodeCount() - 1; // The index of the highest indexed element needing to checked (comparison node)
 	int leftPartitionIndex, rightPartitionIndex; // The index of the lowest and highest indexed element of the unsorted partion of the list 
+	clock_t runTime;
 
 	// Adds the pivot index to the index stack
 	indexStack.push(pivotIndex); 
@@ -281,14 +415,16 @@ template <typename T> void QuickSort(LinkedList<T>& list)
 
 	while (indexStack.size() > 0)
 	{
+		runTime = clock();
 		// Sets the last element of the current partiton
 		rightPartitionIndex = indexStack.top();
 		indexStack.pop();
 		// Sets the first element of the current partition
 		leftPartitionIndex = indexStack.top();
 		indexStack.pop();
+		//std::cout << "Sorting nodes " << leftPartitionIndex << "-" << rightPartitionIndex << " ";
 
-		// Sets the swap  node as the first node after the current pivot node
+		// Sets the swap node as the first node after the current pivot node
 		leftIndex = leftPartitionIndex + 1;
 		// Sets the index of the pivot node
 		pivotIndex = leftPartitionIndex;
@@ -300,6 +436,7 @@ template <typename T> void QuickSort(LinkedList<T>& list)
 		// If the left index ever exceeds the right index, we should be done checking the list
 		if (leftIndex > rightIndex)
 		{
+			//std::cout << "(" << clock() - runTime << " clicks)" << std::endl;
 			continue;
 		}
 
@@ -346,5 +483,7 @@ template <typename T> void QuickSort(LinkedList<T>& list)
 			indexStack.push(rightIndex + 1);
 			indexStack.push(rightPartitionIndex);
 		}
+
+		//std::cout << "(" << clock() - runTime << " clicks)" << std::endl;
 	}
 }
